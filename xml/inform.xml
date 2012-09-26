@@ -1,0 +1,111 @@
+<SOAP-ENV:Envelope
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:cwmp="urn:dslforum-org:cwmp-1-0">
+    <SOAP-ENV:Header>
+      <cwmp:ID SOAP-ENV:mustUnderstand="1">1218676371</cwmp:ID>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body>
+      <cwmp:Inform>
+        <DeviceId>
+          <Manufacturer>ZTE</Manufacturer>
+          <OUI>681ab2</OUI>
+          <ProductClass>EBG1208</ProductClass>
+          <SerialNumber>681ab2ec0010</SerialNumber>
+        </DeviceId>
+        <Event SOAP-ENC:arrayType="cwmp:EventStruct[1]">
+          <EventStruct>
+            <EventCode>6 CONNECTION REQUEST</EventCode>
+            <CommandKey></CommandKey>
+          </EventStruct>
+          <EventStruct>
+            <EventCode>X CT-COM BIND2</EventCode>
+            <CommandKey></CommandKey>
+          </EventStruct>
+        </Event>
+        <MaxEnvelopes>1</MaxEnvelopes>
+        <CurrentTime>2012-09-04T19:37:36+00:00</CurrentTime>
+        <RetryCount>0</RetryCount>
+        <ParameterList SOAP-ENC:arrayType="cwmp:ParameterValueStruct[0008]">
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.DeviceSummary</Name>
+              <Value xsi:type="xsd:string">InternetGatewayDevice:1.1[](Baseline:1, EthernetLAN:1, USBLAN:1, WiFiLAN:1, ADSLWAN:1, Time:1, IPPing:1, ATMLoopback:1, DSLDiagnostics:1, DeviceAssociation:1)</Value>
+            </ParameterValueStruct>
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.DeviceInfo.SpecVersion</Name>
+              <Value xsi:type="xsd:string">1.0-X_CT-COM_3.1</Value>
+            </ParameterValueStruct>
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.DeviceInfo.HardwareVersion</Name>
+              <Value xsi:type="xsd:string">1.0.1</Value>
+            </ParameterValueStruct>
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.DeviceInfo.SoftwareVersion</Name>
+              <Value xsi:type="xsd:string">3.1.184</Value>
+            </ParameterValueStruct>
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.DeviceInfo.ProvisioningCode</Name>
+              <Value xsi:type="xsd:string">3.1</Value>
+            </ParameterValueStruct>
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.ManagementServer.ConnectionRequestURL</Name>
+              <Value xsi:type="xsd:string">http://10.30.235.22:30005/</Value>
+            </ParameterValueStruct>
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.ManagementServer.ParameterKey</Name>
+              <Value xsi:type="xsd:string">XXX</Value>
+            </ParameterValueStruct>
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.WANDevice.1.WANConnectionDevice.2.WANIPConnection.4.ExternalIPAddress</Name>
+              <Value xsi:type="xsd:string">10.30.235.22</Value>
+            </ParameterValueStruct>
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.X_CT-COM_UserInfo.UserName</Name>
+              <Value xsi:type="xsd:string">9918770030C</Value>
+            </ParameterValueStruct>
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.X_CT-COM_UserInfo.UserId</Name>
+              <Value xsi:type="xsd:string">XXX</Value>
+            </ParameterValueStruct>
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.WANDevice.1.WANCommonInterfaceConfig.WANAccessType</Name>
+              <Value xsi:type="xsd:string">EPON</Value>
+            </ParameterValueStruct>
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.WANDevice.1.WANConnectionDevice.2.WANIPConnection.4.X_CT-COM_ServiceList</Name>
+              <Value xsi:type="xsd:string">TR069</Value>
+            </ParameterValueStruct>
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.WANDevice.1.WANConnectionDevice.2.WANIPConnection.4.MACAddress</Name>
+              <Value xsi:type="xsd:string">68:1a:b2:ec:00:12</Value>
+            </ParameterValueStruct>
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.WANDevice.1.WANConnectionDevice.2.X_CT-COM_WANEponLinkConfig.VLANIDMark</Name>
+              <Value xsi:type="xsd:unsignedInt">46</Value>
+            </ParameterValueStruct>
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.WANDevice.1.WANConnectionDevice.4.WANIPConnection.1.X_CT-COM_ServiceList</Name>
+              <Value xsi:type="xsd:string">VOIP</Value>
+            </ParameterValueStruct>
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.WANDevice.1.WANConnectionDevice.4.X_CT-COM_WANEponLinkConfig.VLANIDMark</Name>
+              <Value xsi:type="xsd:unsignedInt">43</Value>
+            </ParameterValueStruct>
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.WANDevice.1.WANConnectionDevice.3.WANPPPConnection.2.X_CT-COM_ServiceList</Name>
+              <Value xsi:type="xsd:string">INTERNET</Value>
+            </ParameterValueStruct>
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.WANDevice.1.WANConnectionDevice.3.WANPPPConnection.2.Username</Name>
+              <Value xsi:type="xsd:string">XXX</Value>
+            </ParameterValueStruct>
+            <ParameterValueStruct>
+              <Name>InternetGatewayDevice.WANDevice.1.WANConnectionDevice.3.X_CT-COM_WANEponLinkConfig.VLANIDMark</Name>
+              <Value xsi:type="xsd:unsignedInt">41</Value>
+            </ParameterValueStruct>
+        </ParameterList>
+      </cwmp:Inform>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

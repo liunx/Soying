@@ -123,7 +123,7 @@ sub gen_http {
 
 	# next, add custom contents
 	for (keys %$custom_contents) {
-		$http_header .= "$_ : $custom_contents->{$_}\r\n";
+		$http_header .= "$_: $custom_contents->{$_}\r\n";
 	}
 
 	# at last, add content length & content if exist.
@@ -134,10 +134,12 @@ sub gen_http {
 	else {
 		my $len = length($http->{content});
 		$http_header .= "Content-Length: $len\r\n";
-		$http_header .= "\r\n\r\n";
+		$http_header .= "\r\n";
 		$http_header .= $http->{content};
 
 	}
+
+	return $http_header;
 }
 
 1;

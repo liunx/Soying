@@ -22,82 +22,91 @@ use utf8;
 use Data::Dumper;
 use XML::Simple qw(:strict);
 use Carp; 
-use LWP;
-use LWP::UserAgent;
+
+# custom object
+use Tr69HTTP;
 
 # store the global objects
 my $_OBJS = {};
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # Constructor new
-# 	params: xml => xxx.xml url => url
+# 	url => url
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 sub new {
 	my $class = shift;
 	my $self = {@_};
 	bless($self, $class);
-	my $file = $self->{xml};
-	if (not defined $file) {
-		croak "xml => file.xml\n";
-	}
 
 	my $url = $self->{url};
-	if (not defined $file) {
+	if (not defined $url) {
 		croak "url => url\n";
 	}
+	$_OBJS->{url} = $url;
 
-	my $inform = XMLin(
-		$file, 
+	return $self;
+}
+
+# _post just generate a http header without content
+# require url
+# return a reference to http object
+sub _post {
+	my $url = shift;
+	my $http = Tr69HTTP->new();
+	$http->url($url);
+	$http->method('POST');
+	$http->agent('Soying CPE/1.0');
+	my $custom_content = $http->custom_content();
+	$custom_content->{'Connection'} = 'keep-alive';
+	$custom_content->{'Content-Type'} = 'text/xml; charset=utf-8';
+	$custom_content->{'SOAPAction'} = '""';
+
+	$_OBJS->{http} = $http;
+
+	return $http;
+}
+
+sub url {
+	my $self = shift;
+	my $url = shift;
+
+	$_OBJS->{url} = $url;
+	return $self;
+}
+
+# send inform messages
+# inform => inform.xml
+sub set_inform {
+	my $self = shift;
+	my $params = {@_};
+	unless (ref $self) {
+		croak "Should call set_inform() with an object!";
+	}
+
+	if (!defined $params->{inform}) {
+		croak "Get inform xml $params->{inform} failed!";
+	}
+
+	my $file = XMLin(
+		$params->{inform}, 
 		KeepRoot => 1, 
 		KeyAttr => 1, 
 		ForceArray => 1, 
 		NormaliseSpace => 1
 	);
 
-	my $xml = XMLout($inform, KeyAttr => 1, KeepRoot => 1, NoSort => 1);
-	$_OBJS->{inform} = $xml;
-	$_OBJS->{url} = $url;
-
-	# create http agent
-	my $ua = LWP::UserAgent->new;
-	$ua->agent("TR69_CPE_04_00");
-	$_OBJS->{agent} = $ua;
-
-	# Create a request
-	my $req = HTTP::Request->new(POST => $url);
-	$req->content_type('text/xml');
-	$_OBJS->{request} = $req;
+	my $xml = XMLout($file, KeyAttr => 1, KeepRoot => 1, NoSort => 1);
+	
+	# we still need add http head
+	my $http = _post($_OBJS->{url});
+	$http->content($xml);
+	my $inform = $http->gen_http();
+	$_OBJS->{inform} = $inform;
 
 	return $self;
 }
 
-# send inform messages
-sub inform {
-	my $self = shift;
-	unless (ref $self) {
-		croak "Should call inform() with an object!";
-	}
-
-	my $xml = $_OBJS->{inform};
-	my $ua = $_OBJS->{agent};
-	my $req = $_OBJS->{request};
-	$req->content($xml);
-	print $req->as_string();
-
-	#print Dumper($req), "\n";
-	# Pass request to the user agent and get a response back
-	my $res = $ua->request($req);
-	#print $res->as_string();
-	# Check the outcome of the response
-	if ($res->is_success) {
-		my $headers = $res->headers();
-		print $headers->{'set-cookie'}, "\n";
-		print $res->content;
-	}
-	else {
-		print $res->status_line, "\n";
-	}
-
-	return $self;
+sub get_inform {
+	return $_OBJS->{inform};
 }
 
 

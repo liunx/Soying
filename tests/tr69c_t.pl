@@ -26,10 +26,10 @@ push @INC, "..";
 require Tr69c;
 
 my $obj = Tr69c->new(
-	xml => '../xml/inform.xml',
 	url => 'http://10.129.228.68:8080/openacs/acs'
 );
 
-$obj->inform();
-sleep 3;
-$obj->inform();
+$obj->set_inform(inform => '../xml/inform.xml');
+my $str = $obj->get_inform();
+
+print $str;

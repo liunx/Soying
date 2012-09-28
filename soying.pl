@@ -32,6 +32,9 @@ use XML::Simple qw(:strict);
 use LWP;
 use LWP::UserAgent;
 
+# use the custom objects
+use Tr69c;
+
 # define the constant scala
 use constant SCHEDULE_TIME => (3 * 1000 * 1000); # 3s
 use constant BUFLEN => (1024 * 1024);
@@ -39,59 +42,46 @@ use constant BUFLEN => (1024 * 1024);
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # Subroutines
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-my $inform_period = SCHEDULE_TIME;
-sub send_inform {
-	my $inform = XMLin(
-		'xml/inform.xml', 
-		KeepRoot => 1, 
-		KeyAttr => 1, 
-		ForceArray => 1, 
-		NormaliseSpace => 1
-	);
-
-	my $xml = XMLout($inform, KeyAttr => 1, KeepRoot => 1, NoSort => 1);
-	#print $xml;
-
-	my $ua = LWP::UserAgent->new;
-	$ua->agent("TR69_CPE_04_00");
-
-	# Create a request
-	my $req = HTTP::Request->new(POST => 'http://10.129.228.68:8080/openacs/acs');
-	$req->content_type('text/xml');
-	$req->content($xml);
-
-	# Pass request to the user agent and get a response back
-	my $res = $ua->request($req);
-
-	# Check the outcome of the response
-	if ($res->is_success) {
-		my $headers = $res->headers();
-		print $headers->{'set-cookie'}, "\n";
-		print $res->content;
-	}
-	else {
-		print $res->status_line, "\n";
-	}
-
-}
-
+my $delta_timer = 0;
 sub shedule_main {
 	my $timer = shift;
-	send_inform();
 
+	my $obj = Tr69c->new(
+		url => 'http://10.129.228.68:8080/openacs/acs'
+	);
+
+	$obj->set_inform(inform => 'xml/inform.xml');
+	my $output = $obj->get_inform();
+	print $output;
 }
 
 sub messages_process {
 	my $message = shift;
+	print "$message\n";
 
 }
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # The main entry
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+# the server sock
 my $lsn = IO::Socket::INET->new(Listen => 1, LocalPort => 9090) 
 	or die $!;
 my $sel = IO::Select->new($lsn);
+
+# the client sock
+my $cli = IO::Socket::INET->new(
+	PeerAddr	=> '10.129.228.66', 
+	PeerPort	=> 8080,
+	Proto		=> 'tcp'		
+) or die $!;
+fcntl($cli, F_SETFL, O_NONBLOCK);
+$sel->add($cli);
+
+# ---------------------------------------------------------------------------
+# objects init
+# ---------------------------------------------------------------------------
 
 my $sleep_time = 100; # us
 my $global_timer = 0;
@@ -136,11 +126,8 @@ while(1) {
 	# -----------------------------------------------------------------------
 	# do the normal affair
 	# -----------------------------------------------------------------------
-	if ($global_timer > SCHEDULE_TIME) {
-		$global_timer = 0;
-		shedule_main($global_timer);
-	}
+	shedule_main($global_timer);
 
 	usleep($sleep_time);
-	$global_timer += $sleep_time;
+	$global_timer += 1;
 }
